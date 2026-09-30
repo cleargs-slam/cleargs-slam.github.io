@@ -164,3 +164,13 @@ body {
   pointer-events: none;
   cursor: default;
 }
+
+.publication-title {
+  margin-bottom: 0.75rem !important;
+}
+
+.publication-subtitle {
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 500;
+  margin-bottom: 1.5rem !important;
+}
