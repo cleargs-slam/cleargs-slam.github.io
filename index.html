@@ -42,15 +42,6 @@
                   <span>Paper</span>
                 </a>
               </span>
-              <!-- Video Link. -->
-              <span class="link-block">
-                <a href="#video" class="button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-video"></i>
-                  </span>
-                  <span>Video</span>
-                </a>
-              </span>
               <!-- Code Link. -->
               <span class="link-block">
                 <a class="button is-normal is-rounded is-dark" disabled>
@@ -151,16 +142,6 @@
 <section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Results on ClearPose</h2>
-    <div class="content has-text-justified">
-      <p>
-        For each scene, <i>Online SLAM</i> shows ClearGS-SLAM running live, and <i>Rendering Results</i>
-        show the RGB and depth rendered from the final map of every method along the estimated
-        trajectory (the two are separate playbacks and are not synchronized). Baselines often blur
-        transparent objects or leave them incomplete, and their depth tends to take the background
-        behind the object; ClearGS-SLAM recovers both the appearance and the depth of the transparent
-        surfaces.
-      </p>
-    </div>
 
     <h3 class="title is-4">Scene 2</h3>
     <h4 class="title is-5 result-subtitle">Online SLAM</h4>
@@ -210,13 +191,6 @@
 <section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Results on Custom Dataset</h2>
-    <div class="content has-text-justified">
-      <p>
-        In mixed scenes ClearGS-SLAM keeps transparent-object boundaries distinct from opaque ones, and
-        in scenes with only transparent objects it preserves the shapes of cups and wine glasses that
-        the baselines lose.
-      </p>
-    </div>
 
     <div class="columns is-centered">
       <div class="column">
