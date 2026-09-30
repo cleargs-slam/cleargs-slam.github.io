@@ -69,21 +69,29 @@
   </div>
 </section>
 
-<!-- Teaser. -->
+<!-- Video. -->
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline>
-        <source src="./static/videos/teaser_gui_scene2.mp4" type="video/mp4">
-      </video>
-      <h2 class="subtitle has-text-centered">
-        ClearGS-SLAM running online on ClearPose Scene 2: the Gaussian map and estimated
-        trajectory (left) with the raw RGB-D input (right).
-      </h2>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <!--
+          YouTube 영상을 올린 뒤 아래 placeholder를 이 iframe으로 바꾸세요 (VIDEO_ID만 교체):
+          <div class="publication-video">
+            <iframe src="https://www.youtube.com/embed/VIDEO_ID?rel=0&amp;showinfo=0"
+                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        -->
+        <div class="video-placeholder">
+          <span class="icon is-large"><i class="fab fa-youtube fa-2x"></i></span>
+          <p>Supplementary video coming soon.</p>
+        </div>
+      </div>
+    </div>
     </div>
   </div>
 </section>
-<!--/ Teaser. -->
+<!--/ Video. -->
 
 
 <section class="section">
@@ -119,24 +127,6 @@
     </div>
     <!--/ Abstract. -->
 
-    <!-- Paper video. -->
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Video</h2>
-        <!--
-          YouTube 영상을 올린 뒤 아래 placeholder를 이 iframe으로 바꾸세요 (VIDEO_ID만 교체):
-          <div class="publication-video">
-            <iframe src="https://www.youtube.com/embed/VIDEO_ID?rel=0&amp;showinfo=0"
-                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-          </div>
-        -->
-        <div class="video-placeholder">
-          <span class="icon is-large"><i class="fab fa-youtube fa-2x"></i></span>
-          <p>Supplementary video coming soon.</p>
-        </div>
-      </div>
-    </div>
-    <!--/ Paper video. -->
   </div>
 </section>
 
@@ -264,10 +254,7 @@
         </video>
       </div>
     </div>
-    <h3 class="title is-4 has-text-centered">MonoGS vs. ClearGS-SLAM</h3>
-    <p class="caption has-text-centered">
-      Move the mouse over each video to compare the RGB rendered by MonoGS (left) and ClearGS-SLAM (right).
-    </p>
+    <h3 class="title is-4 has-text-centered">Rendering Comparison with MonoGS</h3>
     <div class="columns is-centered">
       <div class="column">
         <p class="caption has-text-centered">Easy – Mixed</p>
