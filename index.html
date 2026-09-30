@@ -8,23 +8,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ClearGS-SLAM</title>
 
-
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
         rel="stylesheet">
 
   <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
 </head>
 <body>
 
@@ -77,79 +68,21 @@
   </div>
 </section>
 
+<!-- Teaser. -->
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <div class="hero-body">
-      <video id="teaser" autoplay muted loop playsinline height="100%">
-        <source src="./static/videos/teaser.mp4"
-                type="video/mp4">
+      <video id="teaser" autoplay muted loop playsinline>
+        <source src="./static/videos/teaser_gui_scene2.mp4" type="video/mp4">
       </video>
       <h2 class="subtitle has-text-centered">
-        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
-        free-viewpoint
-        portraits.
+        ClearGS-SLAM running online on ClearPose Scene 2: the Gaussian map and estimated
+        trajectory (left) with the raw RGB-D input (right).
       </h2>
     </div>
   </div>
 </section>
-
-
-<section class="hero is-light is-small">
-  <div class="hero-body">
-    <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/steve.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-blueshirt">
-          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/blueshirt.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-mask">
-          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/mask.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-coffee">
-          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/coffee.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-toby">
-          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/toby2.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<!--/ Teaser. -->
 
 
 <section class="section">
@@ -160,31 +93,25 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            We present the first method capable of photorealistically reconstructing a non-rigidly
-            deforming scene using photos/videos captured casually from mobile phones.
+            We present ClearGS-SLAM, an RGB-D SLAM system designed to handle environments containing
+            transparent objects. Recent GS-based SLAM systems implicitly assume that all observed
+            surfaces are opaque. When transparent objects are present, depth sensors return missing or
+            background measurements on their surfaces, and the reconstruction tends to lose them, which
+            degrades both camera tracking and mapping.
           </p>
           <p>
-            Our approach augments neural radiance fields
-            (NeRF) by optimizing an
-            additional continuous volumetric deformation field that warps each observed point into a
-            canonical 5D NeRF.
-            We observe that these NeRF-like deformation fields are prone to local minima, and
-            propose a coarse-to-fine optimization method for coordinate-based models that allows for
-            more robust optimization.
-            By adapting principles from geometry processing and physical simulation to NeRF-like
-            models, we propose an elastic regularization of the deformation field that further
-            improves robustness.
+            We address this problem by explicitly handling transparency in both tracking and mapping.
+            We employ a monocular network to predict transparent-object masks and depth. Guided by the
+            masks, we exclude depth residuals in transparent regions from camera tracking, thereby
+            mitigating the impact of unreliable depth measurements on transparent surfaces. For mapping,
+            we align the predicted depth to the metric scale of the sensor depth and fuse it with the
+            raw depth, using the resulting fused depth for geometric supervision, while explicitly
+            representing transparent surfaces with low-opacity Gaussians.
           </p>
           <p>
-            We show that <span class="dnerf">Nerfies</span> can turn casually captured selfie
-            photos/videos into deformable NeRF
-            models that allow for photorealistic renderings of the subject from arbitrary
-            viewpoints, which we dub <i>"nerfies"</i>. We evaluate our method by collecting data
-            using a
-            rig with two mobile phones that take time-synchronized photos, yielding train/validation
-            images of the same pose at different viewpoints. We show that our method faithfully
-            reconstructs non-rigidly deforming scenes and reproduces unseen views with high
-            fidelity.
+            Extensive experiments show that ClearGS-SLAM maintains competitive trajectory accuracy
+            compared with state-of-the-art SLAM systems, while achieving the best rendering quality and
+            geometric reconstruction accuracy of transparent regions.
           </p>
         </div>
       </div>
@@ -195,9 +122,16 @@
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
         <h2 class="title is-3">Video</h2>
-        <div class="publication-video">
-          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
-                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <!--
+          YouTube 영상을 올린 뒤 아래 placeholder를 이 iframe으로 바꾸세요 (VIDEO_ID만 교체):
+          <div class="publication-video">
+            <iframe src="https://www.youtube.com/embed/VIDEO_ID?rel=0&amp;showinfo=0"
+                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          </div>
+        -->
+        <div class="video-placeholder">
+          <span class="icon is-large"><i class="fab fa-youtube fa-2x"></i></span>
+          <p>Supplementary video coming soon.</p>
         </div>
       </div>
     </div>
@@ -206,141 +140,261 @@
 </section>
 
 
+<!-- Method. -->
 <section class="section">
   <div class="container is-max-desktop">
-
-    <div class="columns is-centered">
-
-      <!-- Visual Effects. -->
-      <div class="column">
-        <div class="content">
-          <h2 class="title is-3">Visual Effects</h2>
-          <p>
-            Using <i>nerfies</i> you can create fun visual effects. This Dolly zoom effect
-            would be impossible without nerfies since it would require going through a wall.
-          </p>
-          <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/dollyzoom-stacked.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <!--/ Visual Effects. -->
-
-      <!-- Matting. -->
-      <div class="column">
-        <h2 class="title is-3">Matting</h2>
-        <div class="columns is-centered">
-          <div class="column content">
-            <p>
-              As a byproduct of our method, we can also solve the matting problem by ignoring
-              samples that fall outside of a bounding box during rendering.
-            </p>
-            <video id="matting-video" controls playsinline height="100%">
-              <source src="./static/videos/matting.mp4"
-                      type="video/mp4">
-            </video>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    <!--/ Matting. -->
-
-    <!-- Animation. -->
     <div class="columns is-centered">
       <div class="column is-full-width">
-        <h2 class="title is-3">Animation</h2>
-
-        <!-- Interpolating. -->
-        <h3 class="title is-4">Interpolating states</h3>
+        <h2 class="title is-3 has-text-centered">Method</h2>
+        <div class="content has-text-centered">
+          <img src="./static/images/pipeline.png" alt="ClearGS-SLAM pipeline" class="pipeline-figure">
+        </div>
         <div class="content has-text-justified">
           <p>
-            We can also animate the scene by interpolating the deformation latent codes of two input
-            frames. Use the slider here to linearly interpolate between the left frame and the right
-            frame.
+            ClearGS-SLAM takes RGB-D frames as input and jointly estimates the camera poses and a 3D
+            Gaussian map. A frozen monocular network predicts a transparent-object mask and a depth map
+            from each RGB frame, and the three components below decide how these predictions are used.
           </p>
         </div>
-        <div class="columns is-vcentered interpolation-panel">
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_start.jpg"
-                 class="interpolation-image"
-                 alt="Interpolate start reference image."/>
-            <p>Start Frame</p>
-          </div>
-          <div class="column interpolation-video-column">
-            <div id="interpolation-image-wrapper">
-              Loading...
-            </div>
-            <input class="slider is-fullwidth is-large is-info"
-                   id="interpolation-slider"
-                   step="1" min="0" max="100" value="0" type="range">
-          </div>
-          <div class="column is-3 has-text-centered">
-            <img src="./static/images/interpolate_end.jpg"
-                 class="interpolation-image"
-                 alt="Interpolation end reference image."/>
-            <p class="is-bold">End Frame</p>
-          </div>
-        </div>
-        <br/>
-        <!--/ Interpolating. -->
 
-        <!-- Re-rendering. -->
-        <h3 class="title is-4">Re-rendering the input video</h3>
+        <h3 class="title is-4">Fused Depth Estimation</h3>
         <div class="content has-text-justified">
           <p>
-            Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
-            viewpoint such as a stabilized camera by playing back the training deformations.
+            The predicted depth is defined only up to an unknown scale and shift, so it cannot be
+            combined with the sensor depth directly. We align it to the metric scale of the raw depth
+            with RANSAC, using only pixels outside the transparent mask where the RGB-D sensor is
+            reliable, and reject clearly inconsistent alignments. The fused depth then replaces the raw
+            depth only inside the mask and keeps the sensor measurements everywhere else.
           </p>
         </div>
         <div class="content has-text-centered">
-          <video id="replay-video"
-                 controls
-                 muted
-                 preload
-                 playsinline
-                 width="75%">
-            <source src="./static/videos/replay.mp4"
-                    type="video/mp4">
+          <video autoplay muted loop playsinline class="strip-video">
+            <source src="./static/videos/fde_strip.mp4" type="video/mp4">
           </video>
+          <p class="caption">
+            From left to right: raw RGB, raw depth, predicted transparent mask, predicted depth,
+            scale-aligned depth, and the fused depth. The transparent objects missing from the raw
+            depth are filled in at the correct metric distance.
+          </p>
         </div>
-        <!--/ Re-rendering. -->
 
-      </div>
-    </div>
-    <!--/ Animation. -->
-
-
-    <!-- Concurrent Work. -->
-    <div class="columns is-centered">
-      <div class="column is-full-width">
-        <h2 class="title is-3">Related Links</h2>
-
+        <h3 class="title is-4">Mask-Guided Tracking</h3>
         <div class="content has-text-justified">
           <p>
-            There's a lot of excellent work that was introduced around the same time as ours.
+            On a transparent surface the color observation remains informative, whereas the sensor
+            depth is either invalid or belongs to the background behind the object. The pose is
+            therefore estimated from the RGB residual over the whole image and the depth residual only
+            outside the transparent mask. Keyframe candidates with strong motion blur are rejected with a
+            Laplacian sharpness test, since blur destabilizes both the mask prediction and the map
+            update.
           </p>
+        </div>
+
+        <h3 class="title is-4">Transparent-Region Gaussian Mapping</h3>
+        <div class="content has-text-justified">
           <p>
-            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
-          </p>
-          <p>
-            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
-            both use deformation fields to model non-rigid scenes.
-          </p>
-          <p>
-            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
-          </p>
-          <p>
-            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
+            Back-projecting the raw depth inside the mask would place Gaussians on the background seen
+            through the object. Transparent-region Gaussians are instead initialized from the fused depth
+            and given a lower initial opacity and a relaxed pruning threshold, so that a visible
+            background contribution is retained and they are not removed before their color and geometry
+            are optimized. Online mapping uses the fused depth as geometric supervision, with a reduced
+            weight inside the mask, and the map is globally refined after online SLAM with the estimated
+            trajectory fixed.
           </p>
         </div>
       </div>
     </div>
-    <!--/ Concurrent Work. -->
-
   </div>
 </section>
+<!--/ Method. -->
+
+
+<!-- Datasets. -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Datasets</h2>
+    <div class="columns is-centered">
+      <div class="column">
+        <h3 class="title is-5 has-text-centered">ClearPose</h3>
+        <video autoplay muted loop playsinline>
+          <source src="./static/videos/dataset_clearpose.mp4" type="video/mp4">
+        </video>
+        <p class="caption has-text-centered">
+          Six scenes with transparent objects, with ground-truth depth and object mask labels.
+        </p>
+      </div>
+      <div class="column">
+        <h3 class="title is-5 has-text-centered">Custom Dataset</h3>
+        <video autoplay muted loop playsinline>
+          <source src="./static/videos/dataset_custom.mp4" type="video/mp4">
+        </video>
+        <p class="caption has-text-centered">
+          Six scenes across covered, transparent-only, and mixed settings at two difficulty levels.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Datasets. -->
+
+
+<!-- Results. -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Results on ClearPose</h2>
+    <div class="content has-text-justified">
+      <p>
+        For each scene we show the online run of ClearGS-SLAM, followed by the RGB and depth rendered
+        from the final map of every method along the estimated trajectory. Baselines often blur
+        transparent objects or leave them incomplete, and their depth tends to take the background
+        behind the object; ClearGS-SLAM recovers both the appearance and the depth of the transparent
+        surfaces.
+      </p>
+    </div>
+
+    <h3 class="title is-4">Scene 2</h3>
+    <video autoplay muted loop playsinline>
+      <source src="./static/videos/teaser_gui_scene2.mp4" type="video/mp4">
+    </video>
+    <div class="columns is-centered">
+      <div class="column">
+        <p class="caption has-text-centered">Rendered RGB</p>
+        <video controls autoplay muted loop playsinline>
+          <source src="./static/videos/compare_rgb_scene2.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="column">
+        <p class="caption has-text-centered">Rendered Depth</p>
+        <video controls autoplay muted loop playsinline>
+          <source src="./static/videos/compare_depth_scene2.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
+    <h3 class="title is-4">Scene 5</h3>
+    <video autoplay muted loop playsinline>
+      <source src="./static/videos/gui_scene5.mp4" type="video/mp4">
+    </video>
+    <div class="columns is-centered">
+      <div class="column">
+        <p class="caption has-text-centered">Rendered RGB</p>
+        <video controls autoplay muted loop playsinline>
+          <source src="./static/videos/compare_rgb_scene5.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="column">
+        <p class="caption has-text-centered">Rendered Depth</p>
+        <video controls autoplay muted loop playsinline>
+          <source src="./static/videos/compare_depth_scene5.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Results on Custom Dataset</h2>
+    <div class="content has-text-justified">
+      <p>
+        In mixed scenes ClearGS-SLAM keeps transparent-object boundaries distinct from opaque ones, and
+        in scenes with only transparent objects it preserves the shapes of cups and wine glasses that
+        the baselines lose.
+      </p>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column">
+        <h3 class="title is-4 has-text-centered">Easy – Mixed</h3>
+        <video autoplay muted loop playsinline>
+          <source src="./static/videos/gui_mix_easy.mp4" type="video/mp4">
+        </video>
+        <p class="caption has-text-centered">Rendered RGB</p>
+        <video controls autoplay muted loop playsinline>
+          <source src="./static/videos/compare_rgb_mix_easy.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="column">
+        <h3 class="title is-4 has-text-centered">Hard – Only</h3>
+        <video autoplay muted loop playsinline>
+          <source src="./static/videos/gui_many_diff.mp4" type="video/mp4">
+        </video>
+        <p class="caption has-text-centered">Rendered RGB</p>
+        <video controls autoplay muted loop playsinline>
+          <source src="./static/videos/compare_rgb_many_diff.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+</section>
+<!--/ Results. -->
+
+
+<!-- Quantitative. -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
+    <div class="content has-text-justified">
+      <p>
+        Averages over the six scenes of each dataset. Rendering quality is measured with PSNR, SSIM, and
+        LPIPS over the full image; depth accuracy is the RMSE between rendered and ground-truth depth
+        over all valid pixels (All) and inside the ground-truth transparent-object mask (Trans.);
+        tracking accuracy is the ATE RMSE after SE(3) alignment. Best results are in bold.
+      </p>
+    </div>
+
+    <h3 class="title is-5">ClearPose</h3>
+    <div class="table-container">
+      <table class="table is-striped is-narrow is-fullwidth has-text-centered result-table">
+        <thead>
+          <tr>
+            <th rowspan="2" class="has-text-left">Method</th>
+            <th colspan="3">Rendering</th>
+            <th colspan="2">Depth RMSE [m]</th>
+          </tr>
+          <tr>
+            <th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th>All ↓</th><th>Trans. ↓</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="has-text-left">MonoGS</td><td>23.64</td><td>0.728</td><td>0.299</td><td>0.312</td><td>0.356</td></tr>
+          <tr><td class="has-text-left">SplaTAM</td><td>20.15</td><td>0.626</td><td>0.455</td><td>0.311</td><td>0.319</td></tr>
+          <tr><td class="has-text-left">GS-ICP-SLAM</td><td>17.47</td><td>0.500</td><td>0.625</td><td>0.533</td><td>0.392</td></tr>
+          <tr><td class="has-text-left">2DGS-SLAM</td><td>14.72</td><td>0.375</td><td>0.744</td><td>0.848</td><td>0.828</td></tr>
+          <tr class="ours"><td class="has-text-left">ClearGS-SLAM (Ours)</td><td><b>25.29</b></td><td><b>0.799</b></td><td><b>0.221</b></td><td><b>0.251</b></td><td><b>0.139</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="title is-5">Custom Dataset</h3>
+    <div class="table-container">
+      <table class="table is-striped is-narrow is-fullwidth has-text-centered result-table">
+        <thead>
+          <tr>
+            <th rowspan="2" class="has-text-left">Method</th>
+            <th colspan="3">Rendering</th>
+            <th rowspan="2">ATE RMSE [cm] ↓</th>
+          </tr>
+          <tr>
+            <th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="has-text-left">ORB-SLAM3</td><td>–</td><td>–</td><td>–</td><td>3.95</td></tr>
+          <tr><td class="has-text-left">DROID-SLAM</td><td>–</td><td>–</td><td>–</td><td><b>3.35</b></td></tr>
+          <tr><td class="has-text-left">DRL-GSS</td><td>–</td><td>–</td><td>–</td><td>4.22</td></tr>
+          <tr><td class="has-text-left">MonoGS</td><td>29.47</td><td>0.921</td><td>0.187</td><td>4.22</td></tr>
+          <tr><td class="has-text-left">SplaTAM</td><td>27.76</td><td>0.919</td><td>0.194</td><td>5.27</td></tr>
+          <tr><td class="has-text-left">GS-ICP-SLAM</td><td>23.02</td><td>0.850</td><td>0.489</td><td>95.34</td></tr>
+          <tr><td class="has-text-left">2DGS-SLAM</td><td>22.01</td><td>0.822</td><td>0.472</td><td>5.38</td></tr>
+          <tr class="ours"><td class="has-text-left">ClearGS-SLAM (Ours)</td><td><b>31.08</b></td><td><b>0.942</b></td><td><b>0.105</b></td><td>3.39</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+<!--/ Quantitative. -->
 
 
 <footer class="footer">
