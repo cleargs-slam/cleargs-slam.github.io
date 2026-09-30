@@ -108,3 +108,9 @@ video {
 .result-table tr.ours {
   background-color: #eef4fb !important;
 }
+
+.result-subtitle {
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.75rem !important;
+  color: #4a4a4a;
+}

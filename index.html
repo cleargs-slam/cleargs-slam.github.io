@@ -153,55 +153,12 @@
           <p>
             ClearGS-SLAM takes RGB-D frames as input and jointly estimates the camera poses and a 3D
             Gaussian map. A frozen monocular network predicts a transparent-object mask and a depth map
-            from each RGB frame, and the three components below decide how these predictions are used.
+            from each RGB frame. Guided by the mask, the depth residual in transparent regions is excluded
+            from camera tracking; for mapping, the predicted depth is scale-aligned to the sensor depth
+            and fused with it, and transparent surfaces are represented with low-opacity Gaussians.
           </p>
         </div>
 
-        <h3 class="title is-4">Fused Depth Estimation</h3>
-        <div class="content has-text-justified">
-          <p>
-            The predicted depth is defined only up to an unknown scale and shift, so it cannot be
-            combined with the sensor depth directly. We align it to the metric scale of the raw depth
-            with RANSAC, using only pixels outside the transparent mask where the RGB-D sensor is
-            reliable, and reject clearly inconsistent alignments. The fused depth then replaces the raw
-            depth only inside the mask and keeps the sensor measurements everywhere else.
-          </p>
-        </div>
-        <div class="content has-text-centered">
-          <video autoplay muted loop playsinline class="strip-video">
-            <source src="./static/videos/fde_strip.mp4" type="video/mp4">
-          </video>
-          <p class="caption">
-            From left to right: raw RGB, raw depth, predicted transparent mask, predicted depth,
-            scale-aligned depth, and the fused depth. The transparent objects missing from the raw
-            depth are filled in at the correct metric distance.
-          </p>
-        </div>
-
-        <h3 class="title is-4">Mask-Guided Tracking</h3>
-        <div class="content has-text-justified">
-          <p>
-            On a transparent surface the color observation remains informative, whereas the sensor
-            depth is either invalid or belongs to the background behind the object. The pose is
-            therefore estimated from the RGB residual over the whole image and the depth residual only
-            outside the transparent mask. Keyframe candidates with strong motion blur are rejected with a
-            Laplacian sharpness test, since blur destabilizes both the mask prediction and the map
-            update.
-          </p>
-        </div>
-
-        <h3 class="title is-4">Transparent-Region Gaussian Mapping</h3>
-        <div class="content has-text-justified">
-          <p>
-            Back-projecting the raw depth inside the mask would place Gaussians on the background seen
-            through the object. Transparent-region Gaussians are instead initialized from the fused depth
-            and given a lower initial opacity and a relaxed pruning threshold, so that a visible
-            background contribution is retained and they are not removed before their color and geometry
-            are optimized. Online mapping uses the fused depth as geometric supervision, with a reduced
-            weight inside the mask, and the map is globally refined after online SLAM with the estimated
-            trajectory fixed.
-          </p>
-        </div>
       </div>
     </div>
   </div>
@@ -244,8 +201,9 @@
     <h2 class="title is-3 has-text-centered">Results on ClearPose</h2>
     <div class="content has-text-justified">
       <p>
-        For each scene we show the online run of ClearGS-SLAM, followed by the RGB and depth rendered
-        from the final map of every method along the estimated trajectory. Baselines often blur
+        For each scene, <i>Online SLAM</i> shows ClearGS-SLAM running live, and <i>Rendering Results</i>
+        show the RGB and depth rendered from the final map of every method along the estimated
+        trajectory (the two are separate playbacks and are not synchronized). Baselines often blur
         transparent objects or leave them incomplete, and their depth tends to take the background
         behind the object; ClearGS-SLAM recovers both the appearance and the depth of the transparent
         surfaces.
@@ -253,9 +211,11 @@
     </div>
 
     <h3 class="title is-4">Scene 2</h3>
+    <h4 class="title is-5 result-subtitle">Online SLAM</h4>
     <video autoplay muted loop playsinline>
       <source src="./static/videos/teaser_gui_scene2.mp4" type="video/mp4">
     </video>
+    <h4 class="title is-5 result-subtitle">Rendering Results</h4>
     <div class="columns is-centered">
       <div class="column">
         <p class="caption has-text-centered">Rendered RGB</p>
@@ -272,9 +232,11 @@
     </div>
 
     <h3 class="title is-4">Scene 5</h3>
+    <h4 class="title is-5 result-subtitle">Online SLAM</h4>
     <video autoplay muted loop playsinline>
       <source src="./static/videos/gui_scene5.mp4" type="video/mp4">
     </video>
+    <h4 class="title is-5 result-subtitle">Rendering Results</h4>
     <div class="columns is-centered">
       <div class="column">
         <p class="caption has-text-centered">Rendered RGB</p>
@@ -307,9 +269,11 @@
     <div class="columns is-centered">
       <div class="column">
         <h3 class="title is-4 has-text-centered">Easy – Mixed</h3>
+        <h4 class="title is-5 result-subtitle">Online SLAM</h4>
         <video autoplay muted loop playsinline>
           <source src="./static/videos/gui_mix_easy.mp4" type="video/mp4">
         </video>
+        <h4 class="title is-5 result-subtitle">Rendering Results</h4>
         <p class="caption has-text-centered">Rendered RGB</p>
         <video controls autoplay muted loop playsinline>
           <source src="./static/videos/compare_rgb_mix_easy.mp4" type="video/mp4">
@@ -317,9 +281,11 @@
       </div>
       <div class="column">
         <h3 class="title is-4 has-text-centered">Hard – Only</h3>
+        <h4 class="title is-5 result-subtitle">Online SLAM</h4>
         <video autoplay muted loop playsinline>
           <source src="./static/videos/gui_many_diff.mp4" type="video/mp4">
         </video>
+        <h4 class="title is-5 result-subtitle">Rendering Results</h4>
         <p class="caption has-text-centered">Rendered RGB</p>
         <video controls autoplay muted loop playsinline>
           <source src="./static/videos/compare_rgb_many_diff.mp4" type="video/mp4">
@@ -329,72 +295,6 @@
   </div>
 </section>
 <!--/ Results. -->
-
-
-<!-- Quantitative. -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
-    <div class="content has-text-justified">
-      <p>
-        Averages over the six scenes of each dataset. Rendering quality is measured with PSNR, SSIM, and
-        LPIPS over the full image; depth accuracy is the RMSE between rendered and ground-truth depth
-        over all valid pixels (All) and inside the ground-truth transparent-object mask (Trans.);
-        tracking accuracy is the ATE RMSE after SE(3) alignment. Best results are in bold.
-      </p>
-    </div>
-
-    <h3 class="title is-5">ClearPose</h3>
-    <div class="table-container">
-      <table class="table is-striped is-narrow is-fullwidth has-text-centered result-table">
-        <thead>
-          <tr>
-            <th rowspan="2" class="has-text-left">Method</th>
-            <th colspan="3">Rendering</th>
-            <th colspan="2">Depth RMSE [m]</th>
-          </tr>
-          <tr>
-            <th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th><th>All ↓</th><th>Trans. ↓</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td class="has-text-left">MonoGS</td><td>23.64</td><td>0.728</td><td>0.299</td><td>0.312</td><td>0.356</td></tr>
-          <tr><td class="has-text-left">SplaTAM</td><td>20.15</td><td>0.626</td><td>0.455</td><td>0.311</td><td>0.319</td></tr>
-          <tr><td class="has-text-left">GS-ICP-SLAM</td><td>17.47</td><td>0.500</td><td>0.625</td><td>0.533</td><td>0.392</td></tr>
-          <tr><td class="has-text-left">2DGS-SLAM</td><td>14.72</td><td>0.375</td><td>0.744</td><td>0.848</td><td>0.828</td></tr>
-          <tr class="ours"><td class="has-text-left">ClearGS-SLAM (Ours)</td><td><b>25.29</b></td><td><b>0.799</b></td><td><b>0.221</b></td><td><b>0.251</b></td><td><b>0.139</b></td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3 class="title is-5">Custom Dataset</h3>
-    <div class="table-container">
-      <table class="table is-striped is-narrow is-fullwidth has-text-centered result-table">
-        <thead>
-          <tr>
-            <th rowspan="2" class="has-text-left">Method</th>
-            <th colspan="3">Rendering</th>
-            <th rowspan="2">ATE RMSE [cm] ↓</th>
-          </tr>
-          <tr>
-            <th>PSNR ↑</th><th>SSIM ↑</th><th>LPIPS ↓</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td class="has-text-left">ORB-SLAM3</td><td>–</td><td>–</td><td>–</td><td>3.95</td></tr>
-          <tr><td class="has-text-left">DROID-SLAM</td><td>–</td><td>–</td><td>–</td><td><b>3.35</b></td></tr>
-          <tr><td class="has-text-left">DRL-GSS</td><td>–</td><td>–</td><td>–</td><td>4.22</td></tr>
-          <tr><td class="has-text-left">MonoGS</td><td>29.47</td><td>0.921</td><td>0.187</td><td>4.22</td></tr>
-          <tr><td class="has-text-left">SplaTAM</td><td>27.76</td><td>0.919</td><td>0.194</td><td>5.27</td></tr>
-          <tr><td class="has-text-left">GS-ICP-SLAM</td><td>23.02</td><td>0.850</td><td>0.489</td><td>95.34</td></tr>
-          <tr><td class="has-text-left">2DGS-SLAM</td><td>22.01</td><td>0.822</td><td>0.472</td><td>5.38</td></tr>
-          <tr class="ours"><td class="has-text-left">ClearGS-SLAM (Ours)</td><td><b>31.08</b></td><td><b>0.942</b></td><td><b>0.105</b></td><td>3.39</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</section>
-<!--/ Quantitative. -->
 
 
 <footer class="footer">
