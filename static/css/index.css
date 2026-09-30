@@ -167,6 +167,7 @@ video {
 .compare-label-right { right: 8px; }
 
 .video-wrap {
+  flex: 1 1 100%;
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
