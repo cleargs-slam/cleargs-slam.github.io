@@ -114,3 +114,54 @@ video {
   margin-bottom: 0.75rem !important;
   color: #4a4a4a;
 }
+
+.compare-slider {
+  position: relative;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: col-resize;
+  user-select: none;
+  background: #000;
+}
+
+.compare-slider video {
+  display: block;
+  width: 100%;
+  border-radius: 0;
+}
+
+.compare-slider .compare-right {
+  position: absolute;
+  top: 0;
+  left: 0;
+  clip-path: inset(0 0 0 50%);
+}
+
+.compare-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
+  background: #fff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+.compare-label {
+  position: absolute;
+  top: 8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  pointer-events: none;
+  transition: opacity 0.15s;
+}
+
+.compare-label-left { left: 8px; }
+.compare-label-right { right: 8px; }

@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="./static/css/index.css">
 
   <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script defer src="./static/js/compare.js"></script>
 </head>
 <body>
 
@@ -166,35 +167,6 @@
 <!--/ Method. -->
 
 
-<!-- Datasets. -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Datasets</h2>
-    <div class="columns is-centered">
-      <div class="column">
-        <h3 class="title is-5 has-text-centered">ClearPose</h3>
-        <video autoplay muted loop playsinline>
-          <source src="./static/videos/dataset_clearpose.mp4" type="video/mp4">
-        </video>
-        <p class="caption has-text-centered">
-          Six scenes with transparent objects, with ground-truth depth and object mask labels.
-        </p>
-      </div>
-      <div class="column">
-        <h3 class="title is-5 has-text-centered">Custom Dataset</h3>
-        <video autoplay muted loop playsinline>
-          <source src="./static/videos/dataset_custom.mp4" type="video/mp4">
-        </video>
-        <p class="caption has-text-centered">
-          Six scenes across covered, transparent-only, and mixed settings at two difficulty levels.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-<!--/ Datasets. -->
-
-
 <!-- Results. -->
 <section class="section">
   <div class="container is-max-desktop">
@@ -290,6 +262,40 @@
         <video controls autoplay muted loop playsinline>
           <source src="./static/videos/compare_rgb_many_diff.mp4" type="video/mp4">
         </video>
+      </div>
+    </div>
+    <h3 class="title is-4 has-text-centered">MonoGS vs. ClearGS-SLAM</h3>
+    <p class="caption has-text-centered">
+      Move the mouse over each video to compare the RGB rendered by MonoGS (left) and ClearGS-SLAM (right).
+    </p>
+    <div class="columns is-centered">
+      <div class="column">
+        <p class="caption has-text-centered">Easy – Mixed</p>
+        <div class="compare-slider" data-pos="0.5">
+          <video class="compare-left" autoplay muted loop playsinline>
+            <source src="./static/videos/slider_mix_easy_monogs.mp4" type="video/mp4">
+          </video>
+          <video class="compare-right" autoplay muted loop playsinline>
+            <source src="./static/videos/slider_mix_easy_ours.mp4" type="video/mp4">
+          </video>
+          <span class="compare-label compare-label-left">MonoGS</span>
+          <span class="compare-label compare-label-right">ClearGS-SLAM</span>
+          <div class="compare-handle"></div>
+        </div>
+      </div>
+      <div class="column">
+        <p class="caption has-text-centered">Hard – Only</p>
+        <div class="compare-slider" data-pos="0.5">
+          <video class="compare-left" autoplay muted loop playsinline>
+            <source src="./static/videos/slider_many_diff_monogs.mp4" type="video/mp4">
+          </video>
+          <video class="compare-right" autoplay muted loop playsinline>
+            <source src="./static/videos/slider_many_diff_ours.mp4" type="video/mp4">
+          </video>
+          <span class="compare-label compare-label-left">MonoGS</span>
+          <span class="compare-label compare-label-right">ClearGS-SLAM</span>
+          <div class="compare-handle"></div>
+        </div>
       </div>
     </div>
   </div>
