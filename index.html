@@ -44,9 +44,9 @@
               </span>
               <!-- Video Link. -->
               <span class="link-block">
-                <a class="button is-normal is-rounded is-dark" disabled>
+                <a href="#video" class="button is-normal is-rounded is-dark">
                   <span class="icon">
-                      <i class="fab fa-youtube"></i>
+                      <i class="fas fa-video"></i>
                   </span>
                   <span>Video</span>
                 </a>
@@ -74,17 +74,9 @@
   <div class="container is-max-desktop">
     <div class="hero-body">
       <div class="video-wrap has-text-centered">
-        <!--
-          YouTube 영상을 올린 뒤 아래 placeholder를 이 iframe으로 바꾸세요 (VIDEO_ID만 교체):
-          <div class="publication-video">
-            <iframe src="https://www.youtube.com/embed/VIDEO_ID?rel=0&amp;showinfo=0"
-                    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-          </div>
-        -->
-        <div class="video-placeholder">
-          <span class="icon is-large"><i class="fab fa-youtube fa-2x"></i></span>
-          <p>Supplementary video coming soon.</p>
-        </div>
+        <video id="video" controls preload="metadata" playsinline>
+          <source src="./static/videos/cleargs_video_web.mp4" type="video/mp4">
+        </video>
       </div>
     </div>
   </div>
@@ -252,7 +244,7 @@
         </video>
       </div>
     </div>
-    <h3 class="title is-4 has-text-centered">Rendering Comparison with MonoGS</h3>
+    <h3 class="title is-4 has-text-centered">Rendering Comparison</h3>
     <div class="columns is-centered">
       <div class="column">
         <p class="caption has-text-centered">Easy – Mixed</p>
