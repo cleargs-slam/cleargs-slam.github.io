@@ -85,23 +85,18 @@
           <p>
             We present ClearGS-SLAM, an RGB-D SLAM system designed to handle environments containing
             transparent objects. Recent GS-based SLAM systems implicitly assume that all observed
-            surfaces are opaque. When transparent objects are present, depth sensors return missing or
-            background measurements on their surfaces, and the reconstruction tends to lose them, which
-            degrades both camera tracking and mapping.
-          </p>
-          <p>
-            We address this problem by explicitly handling transparency in both tracking and mapping.
-            We employ a monocular network to predict transparent-object masks and depth. Guided by the
-            masks, we exclude depth residuals in transparent regions from camera tracking, thereby
-            mitigating the impact of unreliable depth measurements on transparent surfaces. For mapping,
-            we align the predicted depth to the metric scale of the sensor depth and fuse it with the
-            raw depth, using the resulting fused depth for geometric supervision, while explicitly
-            representing transparent surfaces with low-opacity Gaussians.
-          </p>
-          <p>
-            Extensive experiments show that ClearGS-SLAM maintains competitive trajectory accuracy
-            compared with state-of-the-art SLAM systems, while achieving the best rendering quality and
-            geometric reconstruction accuracy of transparent regions.
+            surfaces are opaque. However, depth sensors often return missing or background measurements
+            on transparent surfaces, causing these systems to lose transparent objects in the
+            reconstruction and degrading both camera tracking and mapping. We address this problem by
+            explicitly handling transparency in both tracking and mapping. We employ a monocular network
+            to predict transparent-object masks and depth. Guided by the masks, we exclude depth
+            residuals in transparent regions from camera tracking, thereby mitigating the impact of
+            unreliable depth measurements on transparent surfaces. For mapping, we align the predicted
+            depth to the metric scale of the raw depth and fuse it with the raw depth, using the
+            resulting fused depth for geometric supervision, while explicitly representing transparent
+            surfaces with low-opacity Gaussians. Extensive experiments show that ClearGS-SLAM maintains
+            competitive trajectory accuracy compared with state-of-the-art SLAM systems, while achieving
+            the best rendering quality and geometric reconstruction accuracy in transparent regions.
           </p>
         </div>
       </div>
